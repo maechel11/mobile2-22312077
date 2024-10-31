@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "24513918384",
+    "project_id": "latihan-if22b",
+    "storage_bucket": "latihan-if22b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24513918384:android:8f8814f8738d57df485275",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX4qkZRnFYNMQtxbm4ESwfThErOKuclvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24513918384:android:3a326cad5a6f97dd485275",
+        "android_client_info": {
+          "package_name": "com.jhoshemaechel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX4qkZRnFYNMQtxbm4ESwfThErOKuclvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
