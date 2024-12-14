@@ -1,56 +1,57 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:myapp/app/routes/app_pages.dart';
 
 class AuthController extends GetxController {
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:1199441857.
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:1948477857.
-  FirebaseAuth auth = FirebaseAuth.instance;  
+  FirebaseAuth auth = FirebaseAuth.instance;
 
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:523337816.
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:2416079862.
-  Stream<User?> get streamAuthStatus => auth.
-  authStateChanges();
+  Stream<User?> get streamAuthStatus => auth.authStateChanges();
   void signup(String emailAddress, String password) async {
-      try {
-        UserCredential myUser = await auth.createUserWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        );
-        await myUser.user!.sendEmailVerification();
-        Get.defaultDialog(
-            title: "Verifikasi email",
-            middleText:
-                "Kami telah mengirimkan verfikasi ke email $emailAddress.",
-            onConfirm: () {
-              Get.back(); //close dialog
-              Get.back(); //login
-            },
-            textConfirm: "OK");
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
-      } catch (e) {
-        print(e);
+    try {
+      UserCredential myUser = await auth.createUserWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+      await myUser.user!.sendEmailVerification();
+      Get.defaultDialog(
+          title: "Verifikasi email",
+          middleText:
+              "Kami telah mengirimkan verfikasi ke email $emailAddress.",
+          onConfirm: () {
+            Get.back(); //close dialog
+            Get.back(); //login
+          },
+          textConfirm: "OK");
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
       }
+    } catch (e) {
+      print(e);
     }
-  void login(String email, String pass) async{
+  }
+
+  void login(String email, String pass) async {
     try {
       final credential = await auth.signInWithEmailAndPassword(
         email: email,
         password: pass,
       );
-      if(credential.user!.emailVerified){
+      if (credential.user!.emailVerified) {
         Get.offAllNamed(Routes.HOME);
-      }else{
+      } else {
         Get.defaultDialog(
           title: "Proses Gagal",
           middleText: "Email belum diverifikasi.",
           textConfirm: "OK",
-          onConfirm: (){
+          onConfirm: () {
             Get.back();
           },
         );
@@ -71,11 +72,12 @@ class AuthController extends GetxController {
       }
     }
   }
-  void logout() async{
+
+  void logout() async {
     await auth.signOut();
     Get.offAllNamed(Routes.LOGIN);
   }
-  
+
   void resetPassword(String email) async {
     if (email != "" && GetUtils.isEmail(email)) {
       try {
@@ -97,6 +99,33 @@ class AuthController extends GetxController {
     } else {
       Get.defaultDialog(
           title: "Terjadi kesalahan", middleText: "Email tidak valid");
+    }
+  }
+
+  void LoginGoogle() async {
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn();
+      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser != null) {
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        Get.offAllNamed(Routes.HOME);
+        print(googleUser);
+      } else {
+        throw "Belum Memilih Akun Google";
+      }
+    } catch (error) {
+      print(error);
+      Get.defaultDialog(
+        title: "Terjadi Kesalahan",
+        middleText: "${error.toString()}",
+      );
     }
   }
 }

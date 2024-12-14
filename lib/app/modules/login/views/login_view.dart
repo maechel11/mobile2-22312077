@@ -71,9 +71,7 @@ class LoginView extends GetView<LoginController> {
               ],
             ),
             ElevatedButton(
-              onPressed: () {
-                cAuth.logout();
-              },
+              onPressed: () => cAuth.LoginGoogle(),
               child: const Text('Login with google'),
             ),
           ],
