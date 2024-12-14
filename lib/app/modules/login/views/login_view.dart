@@ -70,6 +70,12 @@ class LoginView extends GetView<LoginController> {
                 ),
               ],
             ),
+            ElevatedButton(
+              onPressed: () {
+                cAuth.logout();
+              },
+              child: const Text('Login with google'),
+            ),
           ],
         ),
       ),
